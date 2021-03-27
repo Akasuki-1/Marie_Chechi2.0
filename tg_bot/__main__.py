@@ -247,8 +247,9 @@ def bean_about_callback(bot: Bot, update: Update):
             ),
         )
     elif query.data == "bean_close":
+        first_name = update.effective_user.first_name
         query.message.edit_text(
-                PM_START_TEXT,
+                PM_START_TEXT.format(escape_markdown(first_name), escape_markdown(bot.first_name), OWNER_ID),
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Help", callback_data="help_back")]]),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
