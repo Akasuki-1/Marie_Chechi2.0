@@ -249,7 +249,7 @@ def bean_about_callback(bot: Bot, update: Update):
     elif query.data == "bean_close":
         query.message.edit_text(
                 PM_START_TEXT,
-                reply_markup=InlineKeyboardMarkup(buttons),
+                reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton(text="Help", callback_data="help_back")]]),
                 parse_mode=ParseMode.MARKDOWN,
                 timeout=60,
                 disable_web_page_preview=False,
