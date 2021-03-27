@@ -226,7 +226,7 @@ def help_button(bot: Bot, update: Update):
 def bean_about_callback(bot: Bot, update: Update):
     query = update.callback_query
     if query.data == "bean_":
-        query.message.edit_text(
+        update.effective_message.edit_text(
             text=f"നമസ്കാരം ! എന്റെ പേര് *പാപ്പൻ*.*"
             f"\n\nഞാൻ ടെലെഗ്രാമിലെ Group Management Bot ആണ്..."
             f"\nㅤㅤㅤㅤㅤഎന്നെ പ്രവർത്തിപ്പിക്കേണ്ട വിധം ആണ് താഴെ കൊടുത്തിട്ടുള്ളത്..."
