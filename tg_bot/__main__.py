@@ -216,6 +216,15 @@ def help_button(bot: Bot, update: Update):
                                      parse_mode=ParseMode.MARKDOWN,
                                      reply_markup=InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help")))
 
+        elif query.data == "help_close":
+        query.message.edit_text(
+                PM_START_TEXT,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode=ParseMode.MARKDOWN,
+                timeout=60,
+                disable_web_page_preview=False,
+        )
+
         # ensure no spinny white circle
         bot.answer_callback_query(query.id)
         query.message.delete()
