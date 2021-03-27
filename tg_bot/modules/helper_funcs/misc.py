@@ -1,3 +1,5 @@
+# mr bean 😳
+
 from math import ceil
 from typing import List, Dict
 
@@ -74,7 +76,7 @@ def paginate_modules(page_n: int, module_dict: Dict, prefix, chat=None) -> List:
         pairs.append((modules[-1],))
 
     else:
-        pairs += [[EqInlineKeyboardButton("  Back  ", callback_data="help_close")]]
+        pairs += [[EqInlineKeyboardButton("  Back  ", callback_data="bean_close")]]
 
     return pairs
 
