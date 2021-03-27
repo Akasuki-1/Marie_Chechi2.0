@@ -33,18 +33,7 @@ Using standard [Marie](http://telegram.dog/BanhammerMarie_bot) is always gonna b
 
 HELP_STRINGS = """
 നമസ്കാരം ! എന്റെ പേര് *{}*.
-
-ഞാൻ ടെലെഗ്രാമിലെ Group Management Bot ആണ്... എന്നെ പ്രവർത്തിപ്പിക്കേണ്ട വിധം ആണ് താഴെ കൊടുത്തിട്ടുള്ളത്....
-
-*Main* ലഭ്യമായ commandകൾ:
- - /start: Botനെ Start ചെയ്യാൻ...
- - /help: ഈ മെസ്സേജ് നിങ്ങളുടെ PM വരാൻ....
- - /help <module name>: ഒരു MODULE നെക്കുറിച്ചുള്ള വിവരം നിങ്ങളുടെ PMൽ വരാൻ....
- - /donate: സംഭാവന നൽകുന്നതിനെക്കുറിച്ചുള്ള വിവരങ്ങൾ അറിയാൻ!
- - /settings:
-   - in PM:നിങ്ങൾ സെറ്റ് ചെയ്തിട്ടുള്ള SETTINGS എന്തൊക്കെ ആണെന്ന് അറിയാൻ....
-   - in a group:ഗ്രൂപ്പിൽ കൊടുത്താലും  PMൽ settings വരുന്നതാണ്....
-
+നിർദ്ദിഷ്ട മൊഡ്യൂളുകളെക്കുറിച്ചുള്ള ഡോക്യുമെന്റേഷൻ ലഭിക്കുന്നതിന് ചുവടെയുള്ള ബട്ടണുകളിൽ ക്ലിക്കുചെയ്യുക ..
 {}
 And the following:
 """.format(dispatcher.bot.first_name, "" if not ALLOW_EXCL else "\nഈ പറഞ്ഞിരിക്കുന്ന commandകൾ എല്ലാം  / അല്ലെങ്കിൽ ! വെച്ച് ഉപയോഗിക്കാവുന്നതാണ്...\n")
@@ -216,14 +205,6 @@ def help_button(bot: Bot, update: Update):
                                      parse_mode=ParseMode.MARKDOWN,
                                      reply_markup=InlineKeyboardMarkup(paginate_modules(0, HELPABLE, "help")))
 
-        elif query.data == "help_close":
-        query.message.edit_text(
-                PM_START_TEXT,
-                reply_markup=InlineKeyboardMarkup(buttons),
-                parse_mode=ParseMode.MARKDOWN,
-                timeout=60,
-                disable_web_page_preview=False,
-        )
 
         # ensure no spinny white circle
         bot.answer_callback_query(query.id)
@@ -237,6 +218,43 @@ def help_button(bot: Bot, update: Update):
             pass
         else:
             LOGGER.exception("Exception in help buttons. %s", str(query.data))
+
+
+@run_async
+def bean_about_callback(update: Update, context: CallbackContext):
+    query = update.callback_query
+    if query.data == "bean_":
+        query.message.edit_text(
+            text=f"നമസ്കാരം ! എന്റെ പേര് *പാപ്പൻ*.*"
+            f"\n\nഞാൻ ടെലെഗ്രാമിലെ Group Management Bot ആണ്..."
+            f"\nㅤㅤㅤㅤㅤഎന്നെ പ്രവർത്തിപ്പിക്കേണ്ട വിധം ആണ് താഴെ കൊടുത്തിട്ടുള്ളത്..."
+            f"\n\Main ലഭ്യമായ commandകൾ"
+            f"\n→ /start: Botനെ Start ചെയ്യാൻ.."
+            f"\n→ /help <module name>: ഒരു MODULE നെക്കുറിച്ചുള്ള വിവരം നിങ്ങളുടെ PMൽ വരാൻ...."
+            f"\n→ /donate: സംഭാവന നൽകുന്നതിനെക്കുറിച്ചുള്ള വിവരങ്ങൾ !"
+            f"\n\n→ /settings:"
+            f"\nㅤㅤ- in PM:നിങ്ങൾ സെറ്റ് ചെയ്തിട്ടുള്ള SETTINGS എന്തൊക്കെ ആണെന്ന് അറിയാൻ..."
+            f"\nㅤㅤ- in a group:ഗ്രൂപ്പിൽ കൊടുത്താലും  PMൽ settings വരുന്നതാണ്...."
+            f"\n\nഈ പറഞ്ഞിരിക്കുന്ന commandകൾ എല്ലാം  / അല്ലെങ്കിൽ ! വെച്ച് ഉപയോഗിക്കാവുന്നതാണ്..",
+            parse_mode=ParseMode.MARKDOWN,
+            disable_web_page_preview=False,
+            reply_markup=InlineKeyboardMarkup(
+                [
+                 [
+                    InlineKeyboardButton(text="Go Back", callback_data="bean_close")
+                 ]
+                ]
+            ),
+        )
+    elif query.data == "bean_close":
+        query.message.edit_text(
+                PM_START_TEXT,
+                reply_markup=InlineKeyboardMarkup(buttons),
+                parse_mode=ParseMode.MARKDOWN,
+                timeout=60,
+                disable_web_page_preview=False,
+        )
+
 
 
 @run_async
@@ -426,6 +444,8 @@ def main():
     help_handler = CommandHandler("help", get_help)
     help_callback_handler = CallbackQueryHandler(help_button, pattern=r"help_")
 
+    bean_callback_handler = CallbackQueryHandler(bean_about_callback, pattern=r"bean_")
+
     settings_handler = CommandHandler("settings", get_settings)
     settings_callback_handler = CallbackQueryHandler(settings_button, pattern=r"stngs_")
 
@@ -440,6 +460,7 @@ def main():
     dispatcher.add_handler(settings_callback_handler)
     dispatcher.add_handler(migrate_handler)
     dispatcher.add_handler(donate_handler)
+    dispatcher.add_handler(bean_callback_handler)
 
     # dispatcher.add_error_handler(error_callback)
 
