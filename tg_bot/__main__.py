@@ -221,7 +221,7 @@ def help_button(bot: Bot, update: Update):
 
 
 @run_async
-def bean_about_callback(update: Update, context: CallbackContext):
+def bean_about_callback(bot: Bot, update: Update):
     query = update.callback_query
     if query.data == "bean_":
         query.message.edit_text(
